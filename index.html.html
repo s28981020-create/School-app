@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f5f6fa">
+<title>SchoolApp</title>
+<style>
+:root{--bg:#f5f6fa;--card:#fff;--text:#171923;--muted:#7b8190;--blue:#2878f0;--line:#e8eaf0;--green:#16a36a;--red:#e05252;--shadow:0 8px 28px #18213a0d}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+button,input,select{font:inherit}button{cursor:pointer;border:0}
+.wrap{max-width:520px;margin:auto;min-height:100dvh;padding:env(safe-area-inset-top) 16px calc(88px + env(safe-area-inset-bottom))}
+header{display:flex;align-items:center;justify-content:space-between;padding:20px 2px 18px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:21px;letter-spacing:-.6px}
+.logo{width:38px;height:38px;border-radius:13px;background:linear-gradient(145deg,#4b9bff,#1765df);display:grid;place-items:center;color:white;font-size:20px}
+.pill{font-size:12px;color:var(--blue);background:#eaf2ff;padding:7px 11px;border-radius:20px;font-weight:700}
+h1{font-size:29px;letter-spacing:-1px;margin:10px 0 5px}h2{font-size:18px;margin:0 0 14px;letter-spacing:-.3px}.sub{color:var(--muted);font-size:14px;margin:0 0 22px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:18px;margin:12px 0;box-shadow:var(--shadow)}
+.field{margin:13px 0}.field label{display:block;font-size:13px;color:var(--muted);margin:0 0 7px}
+input,select{width:100%;padding:14px 15px;border:1px solid var(--line);border-radius:14px;background:#fafbfe;color:var(--text);outline:none}
+input:focus,select:focus{border-color:#8db8ff;box-shadow:0 0 0 3px #2878f018}
+.primary{width:100%;padding:15px;border-radius:15px;background:var(--blue);color:white;font-weight:750;margin-top:8px}
+.secondary{padding:10px 13px;border-radius:12px;background:#eef3fb;color:#2869c8;font-weight:650}
+.danger{padding:10px 13px;border-radius:12px;background:#fff0f0;color:var(--red);font-weight:650}
+.row{display:flex;align-items:center;justify-content:space-between;gap:10px}.muted{color:var(--muted);font-size:13px}
+.statgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.stat{background:#f6f8fc;border-radius:16px;padding:15px}.stat b{display:block;font-size:25px;margin-top:6px}.grade{font-size:13px;padding:6px 9px;border-radius:9px;background:#eaf7f0;color:#148456;font-weight:800}
+.item{display:flex;align-items:center;justify-content:space-between;padding:13px 0;border-bottom:1px solid var(--line);gap:10px}.item:last-child{border:0}
+.nav{position:fixed;bottom:0;left:0;right:0;background:#ffffffed;backdrop-filter:blur(18px);border-top:1px solid var(--line);padding:10px 12px calc(10px + env(safe-area-inset-bottom));display:flex;justify-content:center;gap:7px;z-index:5}
+.nav button{flex:1;max-width:125px;background:transparent;color:var(--muted);font-size:11px;padding:7px 3px;border-radius:12px}.nav button span{display:block;font-size:20px;margin-bottom:3px}.nav button.active{color:var(--blue);background:#edf4ff}
+.hidden{display:none!important}.notice{padding:12px 14px;border-radius:13px;background:#fff8e8;color:#89631b;font-size:12px;line-height:1.45;margin:14px 0}
+.smallbtn{font-size:12px;padding:8px 10px;border-radius:10px;background:#f0f3f8;color:#414b5d}
+.loginbox{padding-top:7vh}.loginbox .card{padding:23px}
+.center{text-align:center}.avatar{width:64px;height:64px;border-radius:22px;background:#eaf2ff;color:var(--blue);display:grid;place-items:center;font-size:28px;margin:8px auto 14px}
+.empty{text-align:center;padding:25px;color:var(--muted)}
+@media(min-width:600px){body{padding:20px 0}.wrap{background:var(--bg)}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header><div class="brand"><div class="logo">S</div>SchoolApp</div><div id="rolePill" class="pill hidden"></div></header>
+<main id="login" class="loginbox">
+  <div class="center"><div class="avatar">🎓</div><h1>Добро пожаловать</h1><p class="sub">Твой школьный дневник</p></div>
+  <div class="card">
+    <h2>Вход в аккаунт</h2>
+    <div class="field"><label>Логин</label><input id="loginName" autocomplete="username" placeholder="Введите логин"></div>
+    <div class="field"><label>Пароль</label><input id="loginPass" type="password" autocomplete="current-password" placeholder="Введите пароль"></div>
+    <button class="primary" onclick="login()">Войти</button>
+    <p id="loginError" class="muted" style="color:#d44;text-align:center"></p>
+  </div>
+  <div class="card"><b style="font-size:14px">Демо-аккаунты</b><p class="muted">Администратор: admin / admin123</p><p class="muted">Учитель: teacher / teacher123</p><p class="muted">Ученик: student / student123</p><button class="secondary" onclick="fillDemo('student','student123')">Войти как ученик</button></div>
+  <div class="notice">Демонстрационная версия: данные сохраняются только в этом браузере на этом устройстве. Не используй реальные пароли или настоящие школьные данные.</div>
+</main>
+<main id="app" class="hidden">
+  <section id="dashboard"></section>
+</main>
+</div>
+<nav id="nav" class="nav hidden"></nav>
+<script>
+const initialUsers=[
+ {id:1,name:"Администратор",username:"admin",password:"admin123",role:"admin",className:""},
+ {id:2,name:"Анна Иванова",username:"teacher",password:"teacher123",role:"teacher",className:""},
+ {id:3,name:"Александр Петров",username:"student",password:"student123",role:"student",className:"6А"}
+];
+const initialGrades=[
+ {id:1,studentId:3,subject:"Математика",value:18,date:"18.11.2026",comment:"Контрольная работа"},
+ {id:2,studentId:3,subject:"Английский язык",value:19,date:"17.11.2026",comment:"Устный ответ"},
+ {id:3,studentId:3,subject:"Информатика",value:17,date:"15.11.2026",comment:"Практическая работа"}
+];
+let users=JSON.parse(localStorage.getItem("sa_users")||"null")||initialUsers;
+let grades=JSON.parse(localStorage.getItem("sa_grades")||"null")||initialGrades;
+let current=null,tab="home";
+function save(){localStorage.setItem("sa_users",JSON.stringify(users));localStorage.setItem("sa_grades",JSON.stringify(grades))}
+function fillDemo(u,p){document.getElementById("loginName").value=u;document.getElementById("loginPass").value=p}
+function login(){
+ const u=document.getElementById("loginName").value.trim(),p=document.getElementById("loginPass").value;
+ current=users.find(x=>x.username===u&&x.password===p);
+ if(!current){document.getElementById("loginError").textContent="Неверный логин или пароль";return}
+ document.getElementById("login").classList.add("hidden");document.getElementById("app").classList.remove("hidden");
+ document.getElementById("nav").classList.remove("hidden");document.getElementById("rolePill").classList.remove("hidden");
+ document.getElementById("rolePill").textContent=roleName(current.role);tab="home";render()
+}
+function roleName(r){return r==="admin"?"Администратор":r==="teacher"?"Учитель":"Ученик"}
+function logout(){current=null;document.getElementById("login").classList.remove("hidden");document.getElementById("app").classList.add("hidden");document.getElementById("nav").classList.add("hidden");document.getElementById("rolePill").classList.add("hidden")}
+function setTab(t){tab=t;render()}
+function render(){
+ const nav=document.getElementById("nav");
+ let items=current.role==="student"?[["home","⌂","Главная"],["grades","★","Оценки"],["schedule","▦","Расписание"]]:current.role==="teacher"?[["home","⌂","Главная"],["grades","★","Журнал"],["tasks","✎","Задания"]]:[["home","⌂","Главная"],["users","♙","Аккаунты"],["grades","★","Оценки"]];
+ nav.innerHTML=items.map(([id,ic,label])=>`<button class="${tab===id?'active':''}" onclick="setTab('${id}')"><span>${ic}</span>${label}</button>`).join("")+`<button onclick="logout()"><span>↪</span>Выход</button>`;
+ const d=document.getElementById("dashboard");
+ if(tab==="home") d.innerHTML=homeView();
+ else if(tab==="grades") d.innerHTML=gradesView();
+ else if(tab==="users") d.innerHTML=usersView();
+ else if(tab==="schedule") d.innerHTML=scheduleView();
+ else d.innerHTML=tasksView();
+}
+function homeView(){
+ if(current.role==="student"){
+  const mine=grades.filter(g=>g.studentId===current.id),avg=mine.length?(mine.reduce((a,g)=>a+Number(g.value),0)/mine.length).toFixed(1):"—";
+  return `<h1>Привет, ${esc(current.name.split(" ")[0])}!</h1><p class="sub">Вот что происходит в школе сегодня.</p><div class="card"><div class="row"><div><div class="muted">Средний балл</div><b style="font-size:34px">${avg}</b></div><div style="font-size:34px">🎓</div></div></div><div class="statgrid"><div class="stat"><span class="muted">Оценок</span><b>${mine.length}</b></div><div class="stat"><span class="muted">Класс</span><b>${esc(current.className||"—")}</b></div></div><div class="card"><h2>Последние оценки</h2>${gradeRows(mine.slice(-3).reverse())}</div>`;
+ }
+ if(current.role==="teacher") return `<h1>Здравствуйте!</h1><p class="sub">Кабинет учителя · ${esc(current.name)}</p><div class="statgrid"><div class="stat"><span class="muted">Учеников</span><b>${users.filter(u=>u.role==="student").length}</b></div><div class="stat"><span class="muted">Оценок выставлено</span><b>${grades.length}</b></div></div><div class="card"><h2>Быстрые действия</h2><button class="primary" onclick="setTab('grades')">Открыть журнал оценок</button></div>`;
+ return `<h1>Панель управления</h1><p class="sub">Добро пожаловать, ${esc(current.name)}.</p><div class="statgrid"><div class="stat"><span class="muted">Пользователи</span><b>${users.length}</b></div><div class="stat"><span class="muted">Оценки</span><b>${grades.length}</b></div><div class="stat"><span class="muted">Учителя</span><b>${users.filter(u=>u.role==="teacher").length}</b></div><div class="stat"><span class="muted">Ученики</span><b>${users.filter(u=>u.role==="student").length}</b></div></div><div class="card"><h2>Управление школой</h2><button class="primary" onclick="setTab('users')">Управлять аккаунтами</button></div>`;
+}
+function gradeRows(arr){if(!arr.length)return '<div class="empty">Оценок пока нет</div>';return arr.map(g=>`<div class="item"><div><b>${esc(g.subject)}</b><div class="muted">${esc(g.date)} · ${esc(g.comment||"")}</div></div><span class="grade">${g.value}/20</span></div>`).join("")}
+function gradesView(){
+ const students=users.filter(u=>u.role==="student");
+ if(current.role==="student")return `<h1>Мои оценки</h1><p class="sub">Все твои результаты</p><div class="card">${gradeRows(grades.filter(g=>g.studentId===current.id).slice().reverse())}</div>`;
+ return `<h1>${current.role==="admin"?"Все оценки":"Журнал оценок"}</h1><p class="sub">Выбери ученика и добавь оценку.</p><div class="card"><h2>Выставить оценку</h2><div class="field"><label>Ученик</label><select id="gStudent">${students.map(s=>`<option value="${s.id}">${esc(s.name)} · ${esc(s.className||"без класса")}</option>`).join("")}</select></div><div class="field"><label>Предмет</label><select id="gSubject"><option>Математика</option><option>Английский язык</option><option>Информатика</option><option>История</option><option>География</option><option>Русский язык</option></select></div><div class="field"><label>Оценка (1–20)</label><input id="gValue" type="number" min="1" max="20" placeholder="Например, 18"></div><div class="field"><label>Комментарий</label><input id="gComment" placeholder="Например, контрольная работа"></div><button class="primary" onclick="addGrade()">Сохранить оценку</button></div><div class="card"><h2>Последние оценки</h2>${grades.slice().reverse().map(g=>{let s=users.find(u=>u.id===g.studentId);return `<div class="item"><div><b>${esc(s?.name||"Ученик")}</b><div class="muted">${esc(g.subject)} · ${esc(g.date)}</div></div><span class="grade">${g.value}/20</span></div>`}).join("")||'<div class="empty">Оценок пока нет</div>'}</div>`;
+}
+function addGrade(){let sid=Number(document.getElementById("gStudent").value),v=Number(document.getElementById("gValue").value);if(!v||v<1||v>20){alert("Введите оценку от 1 до 20");return}grades.push({id:Date.now(),studentId:sid,subject:document.getElementById("gSubject").value,value:v,date:new Date().toLocaleDateString("ru-RU"),comment:document.getElementById("gComment").value});save();render();alert("Оценка сохранена в этом браузере")}
+function usersView(){return `<h1>Аккаунты</h1><p class="sub">Создание тестовых аккаунтов школы</p><div class="card"><h2>Новый пользователь</h2><div class="field"><label>Имя и фамилия</label><input id="uName" placeholder="Например, Иван Сидоров"></div><div class="field"><label>Логин</label><input id="uLogin" placeholder="Например, ivan06"></div><div class="field"><label>Пароль</label><input id="uPass" placeholder="Создайте пароль"></div><div class="field"><label>Роль</label><select id="uRole"><option value="student">Ученик</option><option value="teacher">Учитель</option><option value="admin">Администратор</option></select></div><div class="field"><label>Класс (для ученика)</label><input id="uClass" placeholder="Например, 6А"></div><button class="primary" onclick="addUser()">Создать аккаунт</button></div><div class="card"><h2>Пользователи (${users.length})</h2>${users.map(u=>`<div class="item"><div><b>${esc(u.name)}</b><div class="muted">${esc(u.username)} · ${roleName(u.role)} ${u.className?'· '+esc(u.className):''}</div></div>${u.id===current.id?'<span class="pill">Вы</span>':`<button class="danger" onclick="removeUser(${u.id})">Удалить</button>`}</div>`).join("")}</div>`}
+function addUser(){let name=document.getElementById("uName").value.trim(),username=document.getElementById("uLogin").value.trim(),password=document.getElementById("uPass").value,role=document.getElementById("uRole").value,className=document.getElementById("uClass").value.trim();if(!name||!username||!password){alert("Заполните имя, логин и пароль");return}if(users.some(u=>u.username===username)){alert("Такой логин уже существует");return}users.push({id:Date.now(),name,username,password,role,className:role==="student"?className:""});save();render();alert("Аккаунт создан")}
+function removeUser(id){if(!confirm("Удалить этот аккаунт?"))return;users=users.filter(u=>u.id!==id);grades=grades.filter(g=>g.studentId!==id);save();render()}
+function scheduleView(){return `<h1>Расписание</h1><p class="sub">Пример учебной недели</p><div class="card">${[["08:00","Математика","Кабинет 12"],["08:50","Английский язык","Кабинет 8"],["09:40","Информатика","Компьютерный класс"],["10:40","История","Кабинет 15"],["11:30","География","Кабинет 6"]].map(x=>`<div class="item"><div><b>${x[1]}</b><div class="muted">${x[2]}</div></div><span class="pill">${x[0]}</span></div>`).join("")}</div><div class="notice">Это пример расписания. В следующей версии администратор сможет редактировать его.</div>`}
+function tasksView(){return `<h1>Домашние задания</h1><p class="sub">Задания для учеников</p><div class="card"><div class="item"><div><b>Математика</b><div class="muted">Решить упражнения 12–15 · Завтра</div></div><span>📘</span></div><div class="item"><div><b>Английский язык</b><div class="muted">Выучить новые слова · Пятница</div></div><span>📝</span></div></div><div class="notice">Демонстрационные задания. Добавление и публикация заданий появятся в следующей версии.</div>`}
+function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+</script>
+</body>
+</html>
